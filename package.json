@@ -8,7 +8,8 @@
     "mogoose": "^3.1.8",
     "mongoose": "^5.4.19",
     "request": "^2.88.0",
-    "sha1": "^1.1.1"
+    "sha1": "^1.1.1",
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {},
   "scripts": {
