@@ -27,6 +27,7 @@ module.exports = {
         })
         return jsData;
     },
+    //格式化JS对象
     formatJsData(jsData) {
         const { xml } = jsData;
         const userData = {};

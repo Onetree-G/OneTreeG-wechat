@@ -2,6 +2,8 @@
 
 const sha1 = require('sha1');
 const { getUserDataAsync, parseXMLData, formatJsData } = require('../utils/tools');
+const template = require('./template');
+const handleResponse = require('./handle-response');
 
 module.exports = () => {
 
@@ -29,38 +31,23 @@ module.exports = () => {
         return;
 
       }
+      //获取用户发送的信息
       const xmlData = await getUserDataAsync(req);
+      //将xml文件转换为JS对象
       const jsData = parseXMLData(xmlData);
-      const userData = formatJsData(jsData)
-      let content = '可以帮我浇点水吗?';
-      if (userData.Content.indexOf('你是谁') !== -1) {
-        content = '我是一只树.';
-      } else if (userData.Content === '什么树') {
-        content = '狗尾巴树.'
-      } else if (userData.Content === '浇水') {
-        content = '谢谢.'
-      } else if (userData.Content === '我是谁') {
-        content = '你是我失散多年的亲儿子.'
-      } else if (userData.Content === '陈功是谁') {
-        content = '即将秃顶的码农.'
-      } else if (userData.Content === '儿子') {
-        content = '叫谁儿子呐?'
-      }else if (userData.Content === '不可以') {
-        content = '那你滚吧!'
-      }
-
-      const replyMessage = `<xml>
-           <ToUserName><![CDATA[${userData.FromUserName}]]></ToUserName>
-           <FromUserName><![CDATA[${userData.ToUserName}]]></FromUserName>
-           <CreateTime>${Date.now()}</CreateTime>
-           <MsgType><![CDATA[text]]></MsgType>;
-           <Content><![CDATA[${content}]]></Content>
-           </xml>`
+      //格式化jsData
+      const userData = formatJsData(jsData);
+      //处理用户发送的消息
+      const options = handleResponse(userData);
+      //定义回复用户消息的六种模式
+      const replyMessage = template(options);
+      //查看打印结果
+      console.log(replyMessage);
       //返回响应
       res.send(replyMessage);
+
     } else {
       res.end('error');
     }
   }
-
 }
